@@ -12,7 +12,7 @@
       </j:when>
       <j:when test="${total.isPresent()}">
         ${total.asInt}
-        <div class="healthReportDetails">
+        <div class="jenkins-tooltip healthReportDetails">
           <table border="0">
             <thead>
               <tr>

@@ -26,10 +26,14 @@ THE SOFTWARE.
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
     <st:adjunct includes="io.jenkins.plugins.analysis.core.model.RunTab.styles"/>
 
+    <j:set var="maxItems" value="7" />
+
     <l:card title="${it.displayName}" expandable="${it.urlName}">
         <j:set var="widget" value="${it.widget}" />
 
-        <div class="jenkins-card__teaser" href="${it.urlName}" tabindex="-1">
+        <a class="wng-widget__link" href="${it.urlName}" tabindex="-1" aria-hidden="true" />
+
+        <div class="jenkins-card__teaser">
             <l:icon src="${widget.symbol}" class="jenkins-!-warning-color" />
             <j:forEach var="line" items="${widget.lines}">
                 <div>${line}</div>
@@ -37,12 +41,21 @@ THE SOFTWARE.
 
             <j:if test="${!empty(widget.failedSymbols)}">
                 <div class="wng-widget">
-                    <j:forEach var="icon" items="${widget.failedSymbols}">
-                        <a href="${it.urlName}/${icon.urlName}" class="wng-widget__item">
-                            <l:icon src="${icon.iconFileName}" />
-                            ${icon.displayName}
-                            <span class="jenkins-badge jenkins-!-warning-color">${icon.result.totalSize}</span>
-                        </a>
+                    <j:forEach var="icon" items="${widget.failedSymbols}" indexVar="i">
+                        <j:if test="${i lt maxItems}">
+                            <a href="${it.urlName}/${icon.urlName}" class="wng-widget__item">
+                                <l:icon src="${icon.iconFileName}" />
+                                ${icon.displayName}
+                                <span class="jenkins-badge jenkins-!-warning-color">${icon.result.totalSize}</span>
+                            </a>
+                        </j:if>
+
+                        <j:if test="${i eq maxItems}">
+                            <span class="wng-widget__item wng-widget__item--more">
+                                ${size(widget.failedSymbols) - maxItems} left
+                                <l:icon src="symbol-chevron-forward-outline plugin-ionicons-api" />
+                            </span>
+                        </j:if>
                     </j:forEach>
                 </div>
             </j:if>

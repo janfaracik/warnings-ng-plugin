@@ -12,9 +12,7 @@ public class Widget {
     private final List<ResultAction> failedSymbols;
 
     public Widget(@MonotonicNonNull List<ResultAction> result) {
-
         failedSymbols = result.stream().filter(e -> e.getResult().getTotalSize() > 0).toList();
-
         int failCount = result.stream().map(e -> e.getResult().getTotalSize()).reduce(0, Integer::sum);
         boolean isFailed = failCount > 0;
 

@@ -29,6 +29,7 @@ import hudson.model.Result;
 import hudson.model.Run;
 import jenkins.management.Badge;
 import jenkins.model.RunAction2;
+import jenkins.model.experimentalflags.BooleanUserExperimentalFlag;
 import jenkins.tasks.SimpleBuildStep.LastBuildAction;
 
 import io.jenkins.plugins.analysis.core.util.HealthDescriptor;
@@ -230,6 +231,13 @@ public class ResultAction implements HealthReportingAction, LastBuildAction, Run
 
     @Override
     public String getIconFileName() {
+        Boolean newBuildPage = BooleanUserExperimentalFlag.
+                getFlagValueForCurrentUser("jenkins.model.experimentalflags.NewBuildPageUserExperimentalFlag");
+
+        if (Boolean.TRUE.equals(newBuildPage)) {
+            return null;
+        }
+
         return getSmallImage();
     }
 
